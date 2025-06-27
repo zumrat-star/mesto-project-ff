@@ -1,6 +1,6 @@
 import "./pages/index.css";
 import { openPopup, closePopup } from "./components/modal.js";
-import { createCard } from "./components/card.js";
+import { createCard} from "./components/card.js";
 import { enableValidation, clearValidation } from "./components/validation.js";
 import { Api } from "./components/api.js";
 
@@ -58,6 +58,7 @@ const elements = {
   newCardPopup: document.querySelector(".popup_type_new-card"),
   addButton: document.querySelector(".profile__add-button"),
   editButton: document.querySelector(".profile__edit-button"),
+  submitButton:document.querySelector(".popup__button")
 };
 
 // Состояние приложения
@@ -144,23 +145,6 @@ const openDeleteConfirmationPopup = (cardElement, cardId) => {
 
 // ====================== Обработчики событий ======================
 
-// Обработчик лайков
-const handleLikeClick = (cardId, isLiked, likeButton, likeCountElement) => {
-  let promise;
-  if (isLiked) {
-    promise = api.unlikeCard(cardId);
-  } else {
-    promise = api.likeCard(cardId);
-  }
-
-  promise
-    .then((updatedCard) => {
-      likeCountElement.textContent = updatedCard.likes.length;
-      likeButton.classList.toggle("card__like-button_is-active", !isLiked);
-    })
-    .catch(console.error);
-};
-
 // Обработчик удаления карточки
 const deleteCard = (cardElement, cardId) => {
   openDeleteConfirmationPopup(cardElement, cardId);
@@ -169,8 +153,6 @@ const deleteCard = (cardElement, cardId) => {
 // Обработчик отправки формы профиля
 const handleProfileFormSubmit = (evt) => {
   evt.preventDefault();
-
-  const submitButton = elements.editForm.querySelector(".popup__button");
   const initialText = submitButton.textContent;
   submitButton.textContent = BUTTON_TEXTS.SAVING;
   submitButton.disabled = true;
@@ -196,8 +178,6 @@ const handleProfileFormSubmit = (evt) => {
 // Обработчик отправки формы аватара
 const handleEditAvatarFormSubmit = (evt) => {
   evt.preventDefault();
-
-  const submitButton = elements.editAvatarForm.querySelector(".popup__button");
   const initialText = submitButton.textContent;
   submitButton.textContent = BUTTON_TEXTS.SAVING;
   submitButton.disabled = true;
@@ -222,8 +202,6 @@ const handleEditAvatarFormSubmit = (evt) => {
 // Обработчик отправки формы карточки
 const handleCardFormSubmit = (evt) => {
   evt.preventDefault();
-
-  const submitButton = elements.cardForm.querySelector(".popup__button");
   const initialText = submitButton.textContent;
   submitButton.textContent = BUTTON_TEXTS.CREATING;
   submitButton.disabled = true;
@@ -258,8 +236,6 @@ const handleCardFormSubmit = (evt) => {
 // Обработчик подтверждения удаления
 const handleDeleteConfirmSubmit = (evt) => {
   evt.preventDefault();
-
-  const submitButton = elements.deleteForm.querySelector(".popup__button");
   const initialText = submitButton.textContent;
   submitButton.textContent = BUTTON_TEXTS.CONFIRMING;
   submitButton.disabled = true;

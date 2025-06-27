@@ -1,3 +1,5 @@
+import { api } from './api.js';
+
 // @todo: Темплейт карточки
 const cardTemplate = document.querySelector("#card-template").content;
 // @todo: Функция создания карточки
@@ -23,6 +25,9 @@ const createCard = (options) => {
 
   // Устанавливаем количество лайков
   likeCountElement.textContent = cardData.likes.length || 0;
+    if (cardData.isLiked) {
+    likeButton.classList.add('card__like-button_is-active');
+  }
 
   // Показываем иконку удаления только для своих карточек
   if (cardData.owner._id !== currentUserId) {
@@ -41,10 +46,23 @@ const createCard = (options) => {
 
   // Обработчики событий
   likeButton.addEventListener("click", () => {
-    likeCallback(cardData._id, isLiked, likeButton, likeCountElement);
+    likeCallback(cardData._id, likeButton, likeCountElement);
   });
   cardImage.addEventListener("click", () => imageClickCallback(cardData));
   return cardElement;
 };
 
-export { createCard };
+//обновление состояния лайка
+const handleLikeClick = (cardId, likeButton, likeCountElement) => {
+  const isLiked = likeButton.classList.contains('card__like-button_is-active');
+  const apiMethod = isLiked ? api.unlikeCard : api.likeCard;
+
+  apiMethod(cardId)
+    .then(updatedCard => {
+      likeCountElement.textContent = updatedCard.likes.length;
+      likeButton.classList.toggle('card__like-button_is-active');
+    })
+    .catch(console.error);
+};
+
+export { createCard};
