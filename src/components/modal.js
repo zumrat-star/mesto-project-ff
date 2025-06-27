@@ -26,4 +26,4 @@ const handleOverlay = (evt) => {
   }
 };
 
-export { openPopup, closePopup, handleEscape, handleOverlay };
+export { openPopup, closePopup};
